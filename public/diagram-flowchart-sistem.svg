@@ -1,0 +1,266 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 820" width="100%" height="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap');
+      text { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+      .title { font-size: 26px; font-weight: 800; fill: #0f172a; letter-spacing: -0.5px; }
+      .subtitle { font-size: 14px; font-weight: 500; fill: #64748b; }
+      .node-title { font-size: 15px; font-weight: 700; fill: #ffffff; }
+      .node-desc { font-size: 12px; font-weight: 500; fill: #e2e8f0; }
+      .badge-text { font-size: 11px; font-weight: 700; }
+      .label-text { font-size: 12px; font-weight: 600; fill: #475569; }
+      .shadow { filter: drop-shadow(0px 8px 16px rgba(15, 23, 42, 0.08)); }
+      .conn { stroke: #64748b; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .conn-accent { stroke: #059669; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    
+    <!-- Marker Arrows -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#059669"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ef4444"/>
+    </marker>
+
+    <!-- Gradients -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <linearGradient id="tealGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f766e"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="indigoGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#4338ca"/>
+    </linearGradient>
+    <linearGradient id="navyGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="amberGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="1280" height="820" fill="url(#bgGrad)" rx="20"/>
+  <rect x="24" y="24" width="1232" height="772" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" class="shadow"/>
+
+  <!-- Header Section -->
+  <g transform="translate(60, 65)">
+    <rect x="0" y="-8" width="44" height="44" rx="10" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1.5"/>
+    <!-- Icon Bar Chart / Workflow -->
+    <path d="M 12 18 L 16 14 L 22 20 L 32 10" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="32" cy="10" r="2.5" fill="#059669"/>
+    <text x="60" y="14" class="title">DIAGRAM ALUR KERJA SISTEM HUMASMONITOR</text>
+    <text x="60" y="34" class="subtitle">Alur Penanganan Laporan Publik: Dari Pengajuan Warga hingga Penyelesaian Resmi (End-to-End)</text>
+  </g>
+
+  <!-- Legend / Status Badges Top Right -->
+  <g transform="translate(860, 52)">
+    <rect width="360" height="52" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="16" y="22" font-size="11" font-weight="700" fill="#475569">STATUS SIKLUS HIDUP LAPORAN:</text>
+    <rect x="16" y="30" width="48" height="15" rx="4" fill="#dbeafe"/>
+    <text x="22" y="41" font-size="9" font-weight="700" fill="#1e40af">BARU</text>
+
+    <rect x="70" y="30" width="88" height="15" rx="4" fill="#fef3c7"/>
+    <text x="76" y="41" font-size="9" font-weight="700" fill="#92400e">DIDISPOSISIKAN</text>
+
+    <rect x="164" y="30" width="102" height="15" rx="4" fill="#ede9fe"/>
+    <text x="170" y="41" font-size="9" font-weight="700" fill="#5b21b6">SEDANG_DIPROSES</text>
+
+    <rect x="272" y="30" width="58" height="15" rx="4" fill="#d1fae5"/>
+    <text x="278" y="41" font-size="9" font-weight="700" fill="#065f46">SELESAI</text>
+
+    <rect x="336" y="30" width="16" height="15" rx="4" fill="#fee2e2"/>
+    <text x="340" y="41" font-size="9" font-weight="700" fill="#991b1b">X</text>
+  </g>
+
+  <!-- Horizontal divider line -->
+  <line x1="60" y1="125" x2="1220" y2="125" stroke="#f1f5f9" stroke-width="2"/>
+
+  <!-- ==================== FLOW NODES ==================== -->
+
+  <!-- NODE 1: START (Pill) -->
+  <g id="node-start" transform="translate(60, 195)" class="shadow">
+    <rect width="140" height="48" rx="24" fill="url(#navyGrad)"/>
+    <circle cx="32" cy="24" r="8" fill="#38bdf8"/>
+    <text x="50" y="29" font-size="14" font-weight="700" fill="#ffffff">Mulai</text>
+  </g>
+
+  <!-- Arrow Start -> Form -->
+  <path d="M 200 219 L 240 219" class="conn" marker-end="url(#arrow)"/>
+
+  <!-- NODE 2: Form Pengaduan Publik -->
+  <g id="node-form" transform="translate(248, 170)" class="shadow">
+    <rect width="210" height="98" rx="14" fill="url(#tealGrad)"/>
+    <text x="18" y="30" class="node-title">1. Isi Formulir Aduan</text>
+    <text x="18" y="52" class="node-desc">• Judul, Kronologi &amp; Lokasi</text>
+    <text x="18" y="70" class="node-desc">• Unggah Bukti (Foto/PDF)</text>
+    <text x="18" y="88" class="node-desc">• Opsi Mode Anonim</text>
+  </g>
+
+  <!-- Arrow Form -> Decision Anti-Spam -->
+  <path d="M 458 219 L 512 219" class="conn" marker-end="url(#arrow)"/>
+
+  <!-- NODE 3: Decision Anti-Spam (Diamond) -->
+  <g id="node-decision-spam" transform="translate(520, 164)" class="shadow">
+    <polygon points="55,0 110,55 55,110 0,55" fill="url(#indigoGrad)"/>
+    <text x="55" y="50" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">Verifikasi</text>
+    <text x="55" y="68" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">Anti-Spam?</text>
+  </g>
+
+  <!-- Arrow Anti-Spam -> Ditolak Bot (Down) -->
+  <path d="M 575 274 L 575 320" class="conn" stroke="#ef4444" marker-end="url(#arrow-red)"/>
+  <text x="585" y="305" font-size="11" font-weight="700" fill="#ef4444">Gagal</text>
+
+  <!-- Sub Node: Ditolak Bot -->
+  <g transform="translate(510, 328)">
+    <rect width="130" height="42" rx="8" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.5"/>
+    <text x="65" y="21" font-size="11" font-weight="700" fill="#991b1b" text-anchor="middle">Form Ditolak</text>
+    <text x="65" y="34" font-size="10" font-weight="500" fill="#dc2626" text-anchor="middle">(Wajib Ceklis Anti-Spam)</text>
+  </g>
+
+  <!-- Arrow Anti-Spam -> Database (Right) -->
+  <path d="M 630 219 L 685 219" class="conn-accent" marker-end="url(#arrow-green)"/>
+  <text x="640" y="210" font-size="11" font-weight="700" fill="#059669">Lolos</text>
+
+  <!-- NODE 4: Database Simpan & Status BARU (Cylinder effect) -->
+  <g id="node-db" transform="translate(695, 168)" class="shadow">
+    <rect width="210" height="102" rx="14" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <!-- Cylinder Icon Header -->
+    <path d="M 22 28 C 22 24 32 20 44 20 C 56 20 66 24 66 28 L 66 40 C 66 44 56 48 44 48 C 32 48 22 44 22 40 Z" fill="#1e293b"/>
+    <ellipse cx="44" cy="28" rx="22" ry="7" fill="#38bdf8"/>
+    <text x="76" y="38" font-size="14" font-weight="700" fill="#f8fafc">PostgreSQL DB</text>
+
+    <!-- Badge BARU -->
+    <rect x="22" y="58" width="70" height="18" rx="5" fill="#3b82f6"/>
+    <text x="57" y="71" font-size="10" font-weight="800" fill="#ffffff" text-anchor="middle">STATUS: BARU</text>
+
+    <text x="22" y="92" font-size="11" font-weight="600" fill="#94a3b8">Tiket: HM-YYMMDD-XXXX</text>
+  </g>
+
+  <!-- Arrow Database -> Meja Komando Humas (Right) -->
+  <path d="M 905 219 L 955 219" class="conn" marker-end="url(#arrow)"/>
+
+  <!-- NODE 5: Meja Komando Humas -->
+  <g id="node-humas-review" transform="translate(965, 170)" class="shadow">
+    <rect width="240" height="98" rx="14" fill="url(#emeraldGrad)"/>
+    <text x="18" y="30" class="node-title">2. Telaah Tim Humas</text>
+    <text x="18" y="52" class="node-desc">• Buka PR Command Center</text>
+    <text x="18" y="70" class="node-desc">• Klasifikasi Tingkat Urgensi</text>
+    <text x="18" y="88" class="node-desc">• Verifikasi Kategori &amp; Audit Log</text>
+  </g>
+
+  <!-- Connector Path from Humas Down to Decision Validasi -->
+  <path d="M 1085 268 L 1085 410 L 980 410" class="conn" marker-end="url(#arrow)"/>
+
+  <!-- NODE 6: Decision Validasi Laporan -->
+  <g id="node-decision-valid" transform="translate(860, 355)" class="shadow">
+    <polygon points="60,0 120,55 60,110 0,55" fill="url(#indigoGrad)"/>
+    <text x="60" y="50" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">Validasi</text>
+    <text x="60" y="68" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">Kelayakan?</text>
+  </g>
+
+  <!-- Branch Decision -> DITOLAK (Left) -->
+  <path d="M 860 410 L 780 410" class="conn" stroke="#ef4444" marker-end="url(#arrow-red)"/>
+  <text x="800" y="400" font-size="11" font-weight="700" fill="#ef4444">Spam / Palsu</text>
+
+  <!-- NODE DITOLAK -->
+  <g transform="translate(630, 380)" class="shadow">
+    <rect width="140" height="60" rx="12" fill="url(#redGrad)"/>
+    <text x="70" y="27" font-size="13" font-weight="800" fill="#ffffff" text-anchor="middle">STATUS: DITOLAK</text>
+    <text x="70" y="46" font-size="11" font-weight="500" fill="#fee2e2" text-anchor="middle">Alasan disimpan di audit</text>
+  </g>
+
+  <!-- Branch Decision -> Disposisi (Down) -->
+  <path d="M 920 465 L 920 520" class="conn-accent" marker-end="url(#arrow-green)"/>
+  <text x="930" y="495" font-size="11" font-weight="700" fill="#059669">Valid &amp; Relevan</text>
+
+  <!-- NODE 7: Disposisi & WhatsApp Blast -->
+  <g id="node-disposisi" transform="translate(800, 528)" class="shadow">
+    <rect width="250" height="106" rx="14" fill="url(#amberGrad)"/>
+    <text x="18" y="28" class="node-title">3. Disposisi ke Bidang</text>
+    
+    <!-- Badge DIDISPOSISIKAN -->
+    <rect x="18" y="38" width="130" height="18" rx="5" fill="#fef3c7"/>
+    <text x="83" y="51" font-size="10" font-weight="800" fill="#b45309" text-anchor="middle">STATUS: DIDISPOSISIKAN</text>
+
+    <text x="18" y="78" class="node-desc">• Humas tulis instruksi disposisi</text>
+    <text x="18" y="96" class="node-desc">• Notifikasi WA otomatis ke PIC</text>
+  </g>
+
+  <!-- Arrow Disposisi -> Tindak Lanjut Lapangan (Left) -->
+  <path d="M 800 581 L 740 581" class="conn" marker-end="url(#arrow)"/>
+
+  <!-- NODE 8: Tindak Lanjut Lapangan -->
+  <g id="node-tindak-lanjut" transform="translate(480, 528)" class="shadow">
+    <rect width="250" height="106" rx="14" fill="url(#navyGrad)"/>
+    <text x="18" y="28" class="node-title">4. Tindak Lanjut Lapangan</text>
+    
+    <!-- Badge SEDANG_DIPROSES -->
+    <rect x="18" y="38" width="145" height="18" rx="5" fill="#ede9fe"/>
+    <text x="90" y="51" font-size="10" font-weight="800" fill="#6d28d9" text-anchor="middle">STATUS: SEDANG_DIPROSES</text>
+
+    <text x="18" y="78" class="node-desc">• Petugas / Unit tangani fisik</text>
+    <text x="18" y="96" class="node-desc">• Kirim bukti perbaikan ke Humas</text>
+  </g>
+
+  <!-- Arrow Tindak Lanjut -> Penyelesaian Humas (Left) -->
+  <path d="M 480 581 L 415 581" class="conn-accent" marker-end="url(#arrow-green)"/>
+
+  <!-- NODE 9: Respon Resmi & SELESAI -->
+  <g id="node-selesai" transform="translate(160, 528)" class="shadow">
+    <rect width="245" height="106" rx="14" fill="url(#emeraldGrad)"/>
+    <text x="18" y="28" class="node-title">5. Tanggapan Resmi Instansi</text>
+    
+    <!-- Badge SELESAI -->
+    <rect x="18" y="38" width="95" height="18" rx="5" fill="#d1fae5"/>
+    <text x="65" y="51" font-size="10" font-weight="800" fill="#047857" text-anchor="middle">STATUS: SELESAI</text>
+
+    <text x="18" y="78" class="node-desc">• Humas input jawaban solusi resmi</text>
+    <text x="18" y="96" class="node-desc">• Stempel waktu penutupan kasus</text>
+  </g>
+
+  <!-- Connector Path from SELESAI Down to Pelacakan Publik -->
+  <path d="M 282 634 L 282 680 L 460 680" class="conn" marker-end="url(#arrow)"/>
+
+  <!-- NODE 10: Pelacakan Mandiri Publik (End / Tracking) -->
+  <g id="node-tracking" transform="translate(470, 655)" class="shadow">
+    <rect width="360" height="58" rx="29" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+    <circle cx="34" cy="29" r="14" fill="#10b981"/>
+    <!-- Checkmark icon -->
+    <path d="M 28 29 L 32 33 L 40 25" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <text x="58" y="27" font-size="13" font-weight="800" fill="#ffffff">Pelacakan Mandiri Publik (/tiket/HM-xxxx)</text>
+    <text x="58" y="44" font-size="11" font-weight="500" fill="#94a3b8">Warga melihat progres transparan &amp; solusi resmi instansi</text>
+  </g>
+
+  <!-- Arrow Tracking to Selesai Terminal -->
+  <path d="M 830 684 L 880 684" class="conn" marker-end="url(#arrow)"/>
+
+  <!-- NODE 11: End -->
+  <g transform="translate(890, 660)" class="shadow">
+    <rect width="130" height="48" rx="24" fill="url(#tealGrad)"/>
+    <circle cx="28" cy="24" r="8" fill="#a7f3d0"/>
+    <text x="44" y="29" font-size="14" font-weight="700" fill="#ffffff">Selesai</text>
+  </g>
+
+  <!-- Footer Info / Copyright -->
+  <g transform="translate(60, 775)">
+    <text x="0" y="0" font-size="11" font-weight="500" fill="#94a3b8">Sistem Informasi Monitoring Humas, Pengaduan Publik &amp; Kendala Fasilitas • HumasMonitor</text>
+  </g>
+</svg>

@@ -1,0 +1,280 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPERADMIN
+  ADMIN
+  STAFF
+  HUMAS
+  TEKNISI
+  MANAJEMEN
+}
+
+enum Sentiment {
+  POSITIF
+  NETRAL
+  NEGATIF
+}
+
+enum MediaType {
+  ONLINE
+  CETAK
+  TELEVISI
+  RADIO
+  SOSIAL_MEDIA
+}
+
+enum ReportStatus {
+  BARU
+  DIDISPOSISIKAN
+  SEDANG_DIPROSES
+  SELESAI
+  DITOLAK
+}
+
+enum ReportUrgency {
+  RENDAH
+  SEDANG
+  TINGGI
+  KRITIS
+}
+
+enum ReportCategory {
+  PELAYANAN_PUBLIK
+  FASILITAS_INFRASTRUKTUR
+  PENGADUAN_PEGAWAI
+  PERMOHONAN_INFORMASI
+  LAINNYA
+}
+
+enum InternalReportStatus {
+  TERKIRIM          // Baru dilaporkan karyawan, menunggu respon teknisi
+  DITERIMA_TEKNISI  // Teknisi mengonfirmasi & bersiap/menuju lokasi
+  SEDANG_DIKERJAKAN // Sedang dalam perbaikan fisik di ruangan
+  SELESAI           // Kendala selesai diperbaiki & berfungsi normal
+  TERKENDALA        // Menunggu suku cadang/sparepart atau eskalasi vendor
+}
+
+enum TechCategory {
+  JARINGAN_INTERNET
+  HARDWARE_KOMPUTER
+  SISTEM_APLIKASI
+  LISTRIK_MEKANIKAL
+  AC_TATA_UDARA
+  AUDIO_VISUAL
+  SARANA_GEDUNG
+}
+
+model User {
+  id              String            @id @default(cuid())
+  name            String
+  email           String            @unique
+  password        String
+  role            Role              @default(STAFF)
+  image           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  monitorings     MediaMonitoring[]
+  internalReports InternalReport[]  @relation("EmployeeReports")
+
+  @@map("users")
+}
+
+model MediaMonitoring {
+  id          String    @id @default(cuid())
+  title       String
+  mediaName   String    // e.g. Kompas, Detik, CNN Indonesia, Tribun
+  mediaType   MediaType @default(ONLINE)
+  sentiment   Sentiment @default(NETRAL)
+  url         String?
+  summary     String?   @db.Text
+  publishedAt DateTime  @default(now())
+  
+  authorId    String?
+  author      User?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("media_monitorings")
+}
+
+model CategoryConfig {
+  id          String   @id @default(cuid())
+  name        String   @unique // Nama tampilan e.g. "Pelayanan Publik & Loket"
+  code        String   @unique // Kode unik e.g. "PELAYANAN_PUBLIK"
+  color       String   @default("#10B981") // Hex color e.g. #3B82F6, #10B981
+  bgLight     String?  @default("bg-emerald-50 text-emerald-800 border-emerald-200")
+  textColor   String?  @default("#FFFFFF")
+  description String?
+  orderIndex  Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("category_configs")
+}
+
+model DepartmentContact {
+  id          String   @id @default(cuid())
+  name        String   @unique // Nama Bidang/Unit e.g. "Bidang Pelayanan Publik & Operasional"
+  contactName String?  // Nama PIC e.g. "Budi Santoso, S.Kom"
+  phone       String   // Nomor WA e.g. "081234567890"
+  email       String?
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("department_contacts")
+}
+
+model WaTemplate {
+  id          String   @id @default(cuid())
+  code        String   @unique // e.g. "DISPOSISI_BIDANG"
+  title       String   // e.g. "Notifikasi Disposisi Bidang"
+  content     String   @db.Text
+  isActive    Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+
+  @@map("wa_templates")
+}
+
+model WaBlastLog {
+  id             String   @id @default(cuid())
+  ticketNumber   String?
+  department     String?
+  recipientPhone String
+  recipientName  String?
+  message        String   @db.Text
+  status         String   @default("TERKIRIM") // "TERKIRIM" | "GAGAL"
+  gateway        String?  @default("WA_GATEWAY_TERPADU")
+  response       String?  @db.Text
+  createdAt      DateTime @default(now())
+
+  @@map("wa_blast_logs")
+}
+
+model PublicReport {
+  id                     String         @id @default(cuid())
+  ticketNumber           String         @unique // Contoh: HM-20260905-ABCD
+  title                  String
+  category               String         @default("PELAYANAN_PUBLIK")
+  content                String         @db.Text
+  targetUnit             String?        // Unit/Bidang Tujuan (contoh: "Pelayanan Publik & Loket Terpadu")
+  location               String?        // Lokasi Kejadian (contoh: "Apotek", "Ruang Rawat Inap")
+  attachmentName         String?        // Nama asli berkas (contoh: "Screenshot (15).png")
+  attachmentUrl          String?        @db.Text // URL/Path berkas di server (/uploads/reports/...)
+  isAnonymous            Boolean        @default(false)
+  reporterName           String?
+  reporterContact        String?
+  status                 ReportStatus   @default(BARU)
+  urgency                ReportUrgency  @default(SEDANG)
+  
+  // Data Disposisi Humas ke Bidang Terkait
+  dispositionTo          String?        // Contoh: "Bidang Pelayanan & Operasional"
+  dispositionNote        String?        @db.Text
+  dispositionTargetPhone String?        // Nomor kontak WhatsApp bidang tujuan
+  dispositionedAt        DateTime?
+
+  // Ubah Kategori Disertai Catatan
+  categoryChangeNote     String?        @db.Text
+  categoryChangedAt      DateTime?
+  categoryChangedBy      String?
+
+  // Tindak Lanjut / Respon Penyelesaian
+  responseNote           String?        @db.Text
+  respondedAt            DateTime?
+
+  // Warning/Instruksi Manajemen/Atasan ke Humas
+  supervisorWarning      String?        @db.Text
+  supervisorWarningAt    DateTime?
+  supervisorWarningBy    String?
+  supervisorWarningWaSent Boolean       @default(false)
+
+  // Relasi Audit Log & Riwayat Perubahan Laporan
+  auditLogs              ReportAuditLog[]
+
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+
+  @@map("public_reports")
+}
+
+model ReportAuditLog {
+  id            String       @id @default(cuid())
+  reportId      String
+  report        PublicReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  action        String       // e.g. "CHANGE_CATEGORY", "DISPOSITION", "RESOLVE", "WARNING"
+  actorName     String       // e.g. "Admin Humas", session.user.name
+  actorRole     String?      // e.g. "HUMAS", "SUPERADMIN"
+  previousVal   String?      // e.g. Nama Kategori sebelumnya
+  newVal        String?      // e.g. Nama Kategori baru
+  previousColor String?      // e.g. "#DC2626" (Merah)
+  newColor      String?      // e.g. "#D97706" (Kuning)
+  note          String?      @db.Text
+  createdAt     DateTime     @default(now())
+
+  @@map("report_audit_logs")
+}
+
+model InternalReport {
+  id               String               @id @default(cuid())
+  ticketNumber     String               @unique // Contoh: KND-20260905-ABCD
+  title            String
+  roomLocation     String               // e.g. "Ruang Rapat Utama Lt. 2", "Poli Penyakit Dalam"
+  techCategory     TechCategory         @default(HARDWARE_KOMPUTER)
+  description      String               @db.Text
+  urgency          ReportUrgency        @default(SEDANG)
+  status           InternalReportStatus @default(TERKIRIM)
+
+  // Unit/Personil Teknisi Tujuan Langsung
+  targetTechnician String               // e.g. "Teknisi Jaringan & Internet", "Teknisi AC & Fasilitas"
+  
+  // Karyawan Internal yang Melaporkan (Wajib Login Terverifikasi)
+  reporterId       String
+  reporter         User                 @relation("EmployeeReports", fields: [reporterId], references: [id], onDelete: Cascade)
+
+  // Catatan Perkembangan & Pergerakan Penanganan Teknisi
+  technicianNotes  String?              @db.Text
+  startedAt        DateTime?
+  completedAt      DateTime?
+
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  @@map("internal_reports")
+}
+
+model SystemSetting {
+  id                     String   @id @default("default")
+  institutionName        String   @default("Dinas Komunikasi, Informatika dan Humas")
+  institutionTagline     String   @default("Sistem Informasi Monitoring Humas, Aduan Publik & Kendala Fasilitas")
+  publicModuleActive     Boolean  @default(true)
+  employeeModuleActive   Boolean  @default(true)
+  technicianModuleActive Boolean  @default(true)
+  availableTechnicians   String   @default("Unit Teknisi Jaringan & IT,Unit Teknisi Hardware & Komputer,Unit Teknisi Tata Udara & AC,Unit Teknisi Listrik & Mekanikal,Unit Teknisi Audio Visual & Multimedia,Unit Teknisi Sarana Prasarana Gedung")
+  systemAnnouncement     String?
+
+  // Pengaturan WA Blast
+  waGatewayEnabled       Boolean  @default(true)
+  waGatewayProvider      String?  @default("SAUNG_WA") // "SAUNG_WA", "SIMULASI_GATEWAY", "FONNTE", "WABLAS", "CUSTOM_HTTP"
+  waGatewayUrl           String?  @default("https://app.saungwa.com/api/create-message")
+  waApiKey               String?
+  waSenderNumber         String?
+  waAppKey               String?
+  waAuthKey              String?
+
+  updatedAt              DateTime @updatedAt
+
+  @@map("system_settings")
+}
